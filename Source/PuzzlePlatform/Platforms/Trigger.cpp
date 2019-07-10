@@ -3,6 +3,7 @@
 
 #include "Trigger.h"
 #include "Components/BoxComponent.h"
+#include "Platforms/MovingPlatform.h"
 
 // Sets default values
 ATrigger::ATrigger()
@@ -12,7 +13,7 @@ ATrigger::ATrigger()
 	PressurePlate = CreateDefaultSubobject<UStaticMeshComponent>(FName("PressurePlate"));
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(FName("TriggerBox"));
 	TriggerBox->SetupAttachment(PressurePlate);
-;
+	TriggerBox->SetGenerateOverlapEvents(true);
 
 }
 
@@ -20,7 +21,10 @@ ATrigger::ATrigger()
 void ATrigger::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &ATrigger::OnOverlapBegin);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &ATrigger::OnOverlapEnd);
+
 }
 
 // Called every frame
@@ -30,3 +34,27 @@ void ATrigger::Tick(float DeltaTime)
 
 }
 
+void ATrigger::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	for (int Index = 0; Index < PlatformsToTrigger.Num(); Index++)
+	{
+		PlatformsToTrigger[Index]->AddActiveTrigger();
+	}
+}
+
+void ATrigger::OnOverlapEnd(
+	UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, 
+	int32 OtherBodyIndex)
+{
+	for (int Index = 0; Index < PlatformsToTrigger.Num(); Index++)
+	{
+		PlatformsToTrigger[Index]->RemoveActiveTrigger();
+	}
+}

@@ -6,6 +6,7 @@
 #include "Engine/StaticMeshActor.h"
 #include "MovingPlatform.generated.h"
 
+class ATrigger;
 /**
  * 
  */
@@ -24,8 +25,13 @@ public:
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
 	FVector TargetLocation;
 
+	void AddActiveTrigger();
+	void RemoveActiveTrigger();
+
 private:
 	FVector GlobalTargetLocation;
 	FVector GlobalStartLocation;
 
+	UPROPERTY(EditAnywhere, Category = "SetUp")
+	int32 ActiveTriggers = 1;
 };

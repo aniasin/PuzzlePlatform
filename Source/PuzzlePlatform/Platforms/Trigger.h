@@ -7,6 +7,7 @@
 #include "Trigger.generated.h"
 
 class UBoxComponent;
+class AMovingPlatform;
 
 UCLASS()
 class PUZZLEPLATFORM_API ATrigger : public AActor
@@ -19,6 +20,25 @@ class PUZZLEPLATFORM_API ATrigger : public AActor
 	UBoxComponent* TriggerBox;
 	UPROPERTY(VisibleAnywhere, Category = "SetUp")
 	UStaticMeshComponent* PressurePlate;
+
+	UFUNCTION()
+	void OnOverlapBegin(
+		UPrimitiveComponent* OverlappedComp,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(
+			UPrimitiveComponent* OverlappedComp,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex);
+
+	UPROPERTY(EditAnywhere, Category = "SetUp")
+	TArray <AMovingPlatform*> PlatformsToTrigger;
 
 protected:
 	// Called when the game starts or when spawned
