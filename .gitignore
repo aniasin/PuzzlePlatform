@@ -4,7 +4,12 @@
 # Visual Studio 2015 database file
 *.VC.db
 
-Content/*
+Content/PolygonCity/*
+Content/SuperGrid/*
+Content/StarterAnim/*
+Content/Weapons/*
+Content/Characters/Character/*
+Content/Characters/Toon_Characters/Characters/*
 
 # Compiled Object files
 *.slo
